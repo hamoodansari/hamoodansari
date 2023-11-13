@@ -1,10 +1,33 @@
-- 👋 Hi, I’m @hamoodansari
-- 👀 I’m interested in ...
-- 🌱 I’m currently learning ...
-- 💞️ I’m looking to collaborate on ...
-- 📫 How to reach me ...
+// User authentication
+FirebaseAuth mAuth = FirebaseAuth.getInstance();
+FirebaseUser currentUser = mAuth.getCurrentUser();
 
-<!---
-hamoodansari/hamoodansari is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+// Real-time messaging with FCM
+FirebaseMessaging.getInstance().subscribeToTopic("chat");
+
+// Database integration (Firebase Realtime Database)
+DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("messages");
+
+// Sending a message
+String messageText = "Hello, World!";
+Message message = new Message(currentUser.getUid(), messageText);
+databaseReference.push().setValue(message);
+
+// Receiving messages
+databaseReference.addChildEventListener(new ChildEventListener() {
+    @Override
+    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        Message receivedMessage = snapshot.getValue(Message.class);
+        // Handle the received message
+    }
+
+    // Other methods for handling data changes
+});
+
+// Message class
+public class Message {
+    private String senderId;
+    private String text;
+
+    // Constructor, getters, and setters
+}
